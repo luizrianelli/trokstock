@@ -21,8 +21,8 @@ Use senhas próprias se a instância estiver acessível a terceiros. O `.env` fi
 | springdoc-openapi | 2.10.1 |
 | PostgreSQL | 17.10 |
 | Node.js usado pelo Docker e CI | 22.22.0 |
-| React / React Router | 19.2.7 / 7.16.0 |
-| TypeScript / Vite / Bootstrap | 5.9.3 / 7.3.6 / 5.3.8 |
+| React / React Router | 19.2.7 / 7.18.7 |
+| TypeScript / Vite / Bootstrap | 5.9.3 / 7.3.8 / 5.3.8 |
 
 O BOM do Spring Boot fixa as versões gerenciadas, incluindo Spring Web, JPA, Bean Validation, Security, Flyway, driver PostgreSQL, JUnit, Mockito e Testcontainers. O `package-lock.json` fixa a árvore npm. O Java 21 atende aos requisitos do Spring Boot 3.5 e o springdoc 2.10 é compatível com essa linha. Node 22.22 atende ao mínimo da linha 22 exigido pelo Vite 7. [Requisitos Spring Boot](https://docs.spring.io/spring-boot/3.5/system-requirements.html) · [Matriz springdoc](https://springdoc.org/v2/) · [Requisitos Vite 7](https://main.vitejs.dev/blog/announcing-vite7)
 
