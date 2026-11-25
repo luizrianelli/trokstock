@@ -50,6 +50,8 @@ Suba apenas o banco em uma instalação local nova com `docker compose up -d db`
 | Cadastrar clientes e produtos, criar e confirmar pedidos | Sim | Sim |
 | Registrar entrada e cancelar pedidos | Sim | — |
 
-As duas contas são configuradas por variáveis de ambiente e registradas em memória com senhas codificadas no startup. Spring Security usa sessão, cookie HttpOnly e CSRF. O frontend consulta `GET /api/auth/csrf` antes de cada escrita e envia o token no cabeçalho retornado. Para usar o Swagger, entre antes pelo frontend usando o mesmo hostname e obtenha o token pelo endpoint CSRF para enviar nas operações de escrita. Consulte o [roteiro](docs/roteiro.md) para praticar com requisições.
+As contas iniciais `admin` e `operador` são configuradas por variáveis de ambiente. A aba **Criar conta** registra novos operadores no PostgreSQL com hash BCrypt. O nome de usuário tem de 3 a 32 caracteres e aceita letras ASCII, números, pontos, hífens e sublinhados. A API compara nomes sem diferenciar maiúsculas de minúsculas. A senha deve ter pelo menos 8 caracteres e ocupar até 72 bytes em UTF-8.
+
+Spring Security usa sessão, cookie HttpOnly e CSRF. O frontend consulta `GET /api/auth/csrf` antes de cada escrita, incluindo o cadastro em `POST /api/auth/register`, e envia o token no cabeçalho retornado. Para testar as demais operações de escrita no Swagger, entre antes pelo frontend usando o mesmo hostname e obtenha o token pelo endpoint CSRF. Consulte o [roteiro](docs/roteiro.md) para praticar com requisições.
 
 O escopo contempla uma empresa e um estoque. Pagamentos, emissão fiscal, frete, múltiplos depósitos e marketplaces estão fora desta versão.

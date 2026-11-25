@@ -36,6 +36,30 @@ class StockFlowIntegrationTest {
     @Autowired ObjectMapper json;
 
     @Test
+    void registersAnOperatorAndReservesExistingUsernames() throws Exception {
+        var guest = (MockHttpSession) mvc.perform(get("/api/auth/csrf")).andReturn().getRequest().getSession(false);
+        mvc.perform(post("/api/auth/register").session(guest).contentType("application/json").content("{}"))
+                .andExpect(status().isForbidden());
+        postJson(guest, "/api/auth/register", """
+                {"username":"Admin","password":"minha-senha-teste"}
+                """, 409);
+        postJson(guest, "/api/auth/register", """
+                {"username":"Novo.Operador","password":"curta"}
+                """, 400);
+        postJson(guest, "/api/auth/register", """
+                {"username":"Novo.Operador","password":"minha-senha-teste","role":"ADMIN"}
+                """, 204);
+        postJson(guest, "/api/auth/register", """
+                {"username":"novo.operador","password":"outra-senha-teste"}
+                """, 409);
+        var operator = login("Novo.Operador", "minha-senha-teste");
+        mvc.perform(get("/api/auth/me").session(operator))
+                .andExpect(jsonPath("$.username").value("novo.operador"))
+                .andExpect(jsonPath("$.roles[0]").value("ROLE_OPERATOR"));
+        postJson(operator, "/api/inventory/entries", entry(1, 5), 403);
+    }
+
+    @Test
     void orderUpdatesStockAtomicallyAndEnforcesPermissions() throws Exception {
         mvc.perform(get("/api/products")).andExpect(status().isUnauthorized());
         var admin = login("admin", "test-admin");

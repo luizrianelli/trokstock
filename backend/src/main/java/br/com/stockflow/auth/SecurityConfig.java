@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -14,12 +15,26 @@ import org.springframework.http.HttpStatus;
 @Configuration
 public class SecurityConfig {
     @Bean
+    PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
     UserDetailsService users(@Value("${stockflow.admin-password}") String admin,
-                             @Value("${stockflow.operator-password}") String operator) {
-        var encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return new InMemoryUserDetailsManager(
+                             @Value("${stockflow.operator-password}") String operator,
+                             PasswordEncoder encoder, OperatorAccountRepository accounts) {
+        var builtInUsers = new InMemoryUserDetailsManager(
                 User.withUsername("admin").password(encoder.encode(admin)).roles("ADMIN").build(),
                 User.withUsername("operador").password(encoder.encode(operator)).roles("OPERATOR").build());
+        return username -> {
+            String normalized = AccountService.normalize(username);
+            if (builtInUsers.userExists(normalized)) {
+                return builtInUsers.loadUserByUsername(normalized);
+            }
+            var account = accounts.findById(normalized).orElseThrow(() ->
+                    new UsernameNotFoundException("Usuário não encontrado."));
+            return User.withUsername(normalized).password(account.passwordHash()).roles("OPERATOR").build();
+        };
     }
 
     @Bean
@@ -27,6 +42,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/csrf", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/inventory/entries", "/api/orders/*/cancel").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("ADMIN", "OPERATOR"))
                 .exceptionHandling(errors -> errors.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
