@@ -1,4 +1,4 @@
-# StockFlow
+# Trok Stock
 
 Controle de pedidos e estoque para uma pequena empresa com um único estoque. O React consome uma API REST em Java e o PostgreSQL guarda cadastros, pedidos, saldos e movimentações.
 
@@ -7,7 +7,7 @@ Controle de pedidos e estoque para uma pequena empresa com um único estoque. O 
 1. Instale e inicie o Docker com o Docker Compose v2 ou superior.
 2. Na raiz, copie `.env.example` para `.env`. No PowerShell, use `Copy-Item .env.example .env`. No Bash, use `cp .env.example .env`.
 3. Execute `docker compose up --build -d` e acompanhe a inicialização com `docker compose logs -f api`.
-4. Abra [StockFlow](http://localhost:3000). Use `admin` com `ADMIN_PASSWORD` ou `operador` com `OPERATOR_PASSWORD`, definidos no `.env`. A [Swagger UI](http://localhost:8080/swagger-ui/index.html) e o [contrato OpenAPI](http://localhost:8080/v3/api-docs) estão na porta da API.
+4. Abra [Trok Stock](http://localhost:3000). Use `admin` com `ADMIN_PASSWORD` ou `operador` com `OPERATOR_PASSWORD`, definidos no `.env`. A [Swagger UI](http://localhost:8080/swagger-ui/index.html) e o [contrato OpenAPI](http://localhost:8080/v3/api-docs) estão na porta da API.
 
 Use senhas próprias se a instância estiver acessível a terceiros. O `.env` fica fora do Git. Para parar, execute `docker compose down`. O volume PostgreSQL preserva os dados.
 

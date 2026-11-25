@@ -1,4 +1,4 @@
-name: StockFlow CI
+name: Trok Stock CI
 on: [push, pull_request]
 permissions:
   contents: read

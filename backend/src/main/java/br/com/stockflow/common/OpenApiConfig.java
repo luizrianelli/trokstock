@@ -13,9 +13,9 @@ public class OpenApiConfig {
     @Bean
     OpenAPI stockFlowApi() {
         return new OpenAPI().info(new Info()
-                .title("StockFlow API")
+                .title("Trok Stock API")
                 .version("0.1.0")
-                .description("Entre pelo StockFlow e obtenha o token em GET /api/auth/csrf antes de enviar POST."));
+                .description("Entre pelo Trok Stock e obtenha o token em GET /api/auth/csrf antes de enviar POST."));
     }
 
     @Bean
