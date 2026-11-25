@@ -24,10 +24,10 @@ function App() {
   useEffect(() => { void reload(); }, []);
   if (session === undefined) return <main className="login"><p role="status">Verificando sessão…</p></main>;
   if (!session) return <main className="login">
-    <div className="login-intro"><span className="brand">Trok Stock</span><h1>Pedidos e estoque em um só lugar</h1></div>
+    <div className="login-intro"><span className="brand">Trok&Stock</span><h1>Pedidos e estoque em um só lugar</h1></div>
     <div className="panel login-form"><h2>Entrar</h2>
       {error && <p className="alert alert-danger" role="alert">{error}</p>}
-      <Form label="Acessar Trok Stock" submit={async form => {
+      <Form label="Acessar Trok&Stock" submit={async form => {
         await api('/auth/login', new URLSearchParams({username:String(form.get('username')), password:String(form.get('password'))}));
         await reload();
       }}>
@@ -39,7 +39,7 @@ function App() {
   const admin = session.roles.includes('ROLE_ADMIN');
   return <div className="workspace">
     <aside className="sidebar">
-      <NavLink className="brand" to="/">Trok Stock</NavLink>
+      <NavLink className="brand" to="/">Trok&Stock</NavLink>
       <nav aria-label="Menu principal">{links.map(([url, title]) => <NavLink end={url === '/'} key={url} to={url}>{title}</NavLink>)}</nav>
     </aside>
     <main className="work">
